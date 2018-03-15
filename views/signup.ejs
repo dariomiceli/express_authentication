@@ -2,6 +2,11 @@
 
     <h1>Signup</h1>
 
+     <!-- flash message -->
+    <% if(message.length > 0) { %>                        
+        <div class="alert alert-danger"> <%= message %> </div>
+    <% } %>
+
     <form action="/users/signup" method="post">
         <div class="form-group">
             <label>Name</label>

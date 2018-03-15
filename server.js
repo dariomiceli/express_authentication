@@ -10,6 +10,7 @@ const
 	session = require('express-session'),
 	MongoDBStore = require('connect-mongodb-session')(session),
 	passport = require('passport'),
+	passportConfig = require('./config/passport.js'),
 	usersRouter = require('./routes/users.js')
 
 // environment port
@@ -38,6 +39,16 @@ app.use(flash())
 // ejs configuration
 app.set('view engine', 'ejs')
 app.use(ejsLayouts)
+app.use(session({							// allows us to generate cookies based on passport configuration
+	secret: "secretstring",
+	cookie: {maxAge: 60000000},				// cookie is good for this long. will log out once expired
+	resave: true,
+	saveUninitialized: false,				// if someones not logged in, dont generate cookie
+	store: store							// where do we keep cookies? server (mongo). check line 27
+}))			
+
+app.use(passport.initialize())
+app.use(passport.session())
 
 //root route
 app.get('/', (req,res) => {
